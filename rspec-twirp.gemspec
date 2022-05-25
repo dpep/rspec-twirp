@@ -1,7 +1,7 @@
 package_name = File.basename(__FILE__).split(".")[0]
 require File.expand_path("lib/#{package_name}/version", __dir__)
 
-package = MY_NEW_GEM
+package = RSpecTwirp
 
 
 Gem::Specification.new do |s|

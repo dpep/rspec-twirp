@@ -1,3 +1,3 @@
-module MY_NEW_GEM
+module RSpecTwirp
   VERSION = "0.0.0"
 end
