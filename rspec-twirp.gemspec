@@ -1,5 +1,5 @@
 package_name = File.basename(__FILE__).split(".")[0]
-require File.expand_path("lib/#{package_name}/version", __dir__)
+load Dir.glob("lib/**/version.rb")[0]
 
 package = RSpecTwirp
 
@@ -15,6 +15,9 @@ Gem::Specification.new do |s|
 
   s.files       = Dir.glob("lib/**/*")
   s.test_files  = Dir.glob("spec/**/*_spec.rb")
+
+  s.add_dependency "twirp"
+  s.add_dependency "rspec-expectations", ">= 3"
 
   s.add_development_dependency "byebug"
   s.add_development_dependency "codecov"

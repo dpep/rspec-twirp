@@ -1,5 +1,1 @@
-require "rspec-twirp/version"
-
-module RSpecTwirp
-
-end
+require "rspec/twirp"
