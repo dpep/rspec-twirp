@@ -1,32 +1,67 @@
 describe "be_a_twirp_request" do
-  subject { Example::HelloRequest.new(**attrs) }
+  subject { HelloRequest.new(**attrs) }
 
   let(:attrs) { {} }
 
   it { is_expected.to be_a_twirp_request }
-  it { is_expected.to be_a_twirp_request(Example::HelloRequest) }
+
+  it "catches non-twirp requests" do
+    expect {
+      expect(Object).to be_a_twirp_request
+    }.to fail
+  end
+
+  it "matches a specific request type" do
+    is_expected.to be_a_twirp_request(HelloRequest)
+  end
+
+  it "catches type mismatches" do
+    expect {
+      is_expected.to be_a_twirp_request(GoodbyeRequest)
+    }.to fail
+  end
+
+  it "catches erroneous request types" do
+    expect {
+      is_expected.to be_a_twirp_request(Object)
+    }.to raise_error(ArgumentError, /Object/)
+  end
 
   context "with attributes" do
-    let(:attrs) { { name: "Bob" } }
+    let(:attrs) { { name: "Bob", count: 3 } }
 
     it "can match attributes" do
-      is_expected.to be_a_twirp_request.with(name: "Bob")
+      is_expected.to be_a_twirp_request.with(name: "Bob", count: 3)
     end
 
-    it "can use a regex to match" do
-      is_expected.to be_a_twirp_request.with(name: /^B/)
+    it "supports regex matches" do
+      is_expected.to be_a_twirp_request.with(name: /^B/, count: 3)
+    end
+
+    it "supports range matches" do
+      is_expected.to be_a_twirp_request.with(name: "Bob", count: 1..5)
     end
 
     it "catches mismatches" do
       expect {
-        is_expected.to be_a_twirp_request.with(name: "nope")
+        is_expected.to be_a_twirp_request.with(name: "nope", count: 3)
+      }.to fail
+
+      expect {
+        is_expected.to be_a_twirp_request.with(name: "Bob", count: 1)
       }.to fail
     end
 
     it "catches the erroneous attribute matches" do
       expect {
-        is_expected.to be_a_twirp_request.with(namezzz: "nope")
+        is_expected.to be_a_twirp_request.with(namezzz: "Bob")
       }.to raise_error(ArgumentError, /namezzz/)
+    end
+
+    it "catches type mismatches" do
+      expect {
+        is_expected.to be_a_twirp_request.with(name: 123)
+      }.to raise_error(TypeError, /string field.*given Integer/)
     end
   end
 end

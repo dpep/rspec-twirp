@@ -1,7 +1,7 @@
 package_name = File.basename(__FILE__).split(".")[0]
 load Dir.glob("lib/**/version.rb")[0]
 
-package = RSpecTwirp
+package = RSpec::Twirp
 
 
 Gem::Specification.new do |s|
