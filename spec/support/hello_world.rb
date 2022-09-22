@@ -38,9 +38,8 @@ end
 
 class HelloWorldHandler
   def hello(req, env)
-    if req.name.empty?
-      return Twirp::Error.invalid_argument("name is mandatory")
-    end
+    return Twirp::Error.not_found("name required") if req.name.empty?
+    return Twirp::Error.invalid_argument("count must be >= 0") if req.count < 0
 
     count = [ 1, req.count ].max
     msg = ["Hello"] * (count - 1) + ["Hello #{req.name}"]
