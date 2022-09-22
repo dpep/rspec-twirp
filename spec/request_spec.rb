@@ -35,20 +35,20 @@ describe "be_a_twirp_request" do
     end
 
     it "supports regex matches" do
-      is_expected.to be_a_twirp_request.with(name: /^B/, count: 3)
+      is_expected.to be_a_twirp_request.with(name: /^B/)
     end
 
     it "supports range matches" do
-      is_expected.to be_a_twirp_request.with(name: "Bob", count: 1..5)
+      is_expected.to be_a_twirp_request.with(count: 1..5)
     end
 
     it "catches mismatches" do
       expect {
-        is_expected.to be_a_twirp_request.with(name: "nope", count: 3)
+        is_expected.to be_a_twirp_request.with(name: "nope")
       }.to fail
 
       expect {
-        is_expected.to be_a_twirp_request.with(name: "Bob", count: 1)
+        is_expected.to be_a_twirp_request.with(count: 1)
       }.to fail
     end
 

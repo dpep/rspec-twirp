@@ -42,8 +42,8 @@ RSpec::Matchers.define :be_a_twirp_request do |type = nil|
       raise TypeError, e.message
     end
 
-    # match attributes
-    values_match?(@attrs, actual.to_h)
+    # match attributes which are present
+    values_match?(@attrs, actual.to_h.slice(*@attrs.keys))
   end
 
   description do
