@@ -42,8 +42,9 @@ class HelloWorldHandler
       return Twirp::Error.invalid_argument("name is mandatory")
     end
 
-    count = req.count || 1
+    count = [ 1, req.count ].max
+    msg = ["Hello"] * (count - 1) + ["Hello #{req.name}"]
 
-    { message: ["Hello #{req.name}"] * count }
+    { message: msg }
   end
 end
