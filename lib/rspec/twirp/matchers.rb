@@ -29,7 +29,7 @@ RSpec::Matchers.define :be_a_twirp_request do |type = nil|
       discrete_attrs = @attrs.transform_values do |attr|
         case attr
         when Regexp
-          "Regexp"
+          attr.inspect
         when Range
           attr.first
         else
