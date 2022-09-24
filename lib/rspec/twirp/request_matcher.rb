@@ -1,5 +1,3 @@
-require "rspec/expectations"
-
 RSpec::Matchers.define :be_a_twirp_request do |type = nil|
   chain :with do |**attrs|
     @attrs = attrs
@@ -18,23 +16,7 @@ RSpec::Matchers.define :be_a_twirp_request do |type = nil|
 
     return true unless @attrs
 
-    # sanity check type and names of attrs
-    begin
-      discrete_attrs = @attrs.transform_values do |attr|
-        case attr
-        when Regexp
-          attr.inspect
-        when Range
-          attr.first
-        else
-          attr
-        end
-      end
-
-      actual.class.new(**discrete_attrs)
-    rescue Google::Protobuf::TypeError => e
-      raise TypeError, e.message
-    end
+    RSpec::Twirp.validate_types(@attrs, actual.class)
 
     # match attributes which are present
     values_match?(@attrs, actual.to_h.slice(*@attrs.keys))
