@@ -2,6 +2,7 @@ require "rspec/expectations"
 
 require "rspec/twirp/error_matcher"
 require "rspec/twirp/request_matcher"
+require "rspec/twirp/response_matcher"
 
 module RSpec
   module Twirp
@@ -16,10 +17,12 @@ module RSpec
           attr.inspect
         when Range
           attr.first
+        when RSpec::Matchers::BuiltIn::BaseMatcher
+          nil
         else
           attr
         end
-      end
+      end.compact
 
       klass.new(**discrete_attrs)
     rescue Google::Protobuf::TypeError => e

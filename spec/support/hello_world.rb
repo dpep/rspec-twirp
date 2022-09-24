@@ -16,11 +16,16 @@ pool.build do
   add_message "GoodbyeRequest" do
     optional :name, :string, 1
   end
+
+  add_message "GoodbyeResponse" do
+    optional :name, :string, 1
+  end
 end
 
 HelloRequest = pool.lookup("HelloRequest").msgclass
 HelloResponse = pool.lookup("HelloResponse").msgclass
 GoodbyeRequest = pool.lookup("GoodbyeRequest").msgclass
+GoodbyeResponse = pool.lookup("GoodbyeResponse").msgclass
 
 # Google::Protobuf::DescriptorPool.generated_pool.build do
 # HelloRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("HelloRequest").msgclass
