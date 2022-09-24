@@ -13,18 +13,12 @@ RSpec::Matchers.define :be_a_twirp_request do |type = nil|
 
     return false unless actual.is_a?(Google::Protobuf::MessageExts)
 
-    # match request type
+    # match expected request type
     return false if type && actual.class != type
 
     return true unless @attrs
 
-    # ensure attributes are valid for request
-    invalid_attrs = @attrs.keys.map(&:to_sym) - actual.to_h.keys
-    unless invalid_attrs.empty?
-      raise ArgumentError, "Unknown field name: #{invalid_attrs.join(',')}"
-    end
-
-    # type check
+    # sanity check type and names of attrs
     begin
       discrete_attrs = @attrs.transform_values do |attr|
         case attr
