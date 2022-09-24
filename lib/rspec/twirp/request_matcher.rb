@@ -1,8 +1,4 @@
-RSpec::Matchers.define :be_a_twirp_request do |type = nil|
-  chain :with do |**attrs|
-    @attrs = attrs
-  end
-
+RSpec::Matchers.define :be_a_twirp_request do |type = nil, **attrs|
   match do |actual|
     # ensure type is a valid twirp request type
     if type && !(type < Google::Protobuf::MessageExts)
@@ -14,12 +10,12 @@ RSpec::Matchers.define :be_a_twirp_request do |type = nil|
     # match expected request type
     return false if type && actual.class != type
 
-    return true unless @attrs
+    return true if attrs.empty?
 
-    RSpec::Twirp.validate_types(@attrs, actual.class)
+    RSpec::Twirp.validate_types(attrs, actual.class)
 
     # match attributes which are present
-    values_match?(@attrs, actual.to_h.slice(*@attrs.keys))
+    values_match?(attrs, actual.to_h.slice(*attrs.keys))
   end
 
   description do

@@ -25,7 +25,7 @@ describe "be_a_twirp_response" do
     let(:attrs) { { message: msg } }
     let(:msg) { [ "Hello World" ] }
 
-    it { is_expected.to be_a_twirp_response(message: [ "Hello World" ]) }
+    it { is_expected.to be_a_twirp_response(**attrs) }
 
     it "supports regex matches" do
       is_expected.to be_a_twirp_response(message: include(/Hello/))
