@@ -1,1 +1,1 @@
-require "rspec/twirp/matchers"
+require "rspec/twirp/request_matcher"
