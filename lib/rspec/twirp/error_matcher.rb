@@ -32,7 +32,6 @@ RSpec::Matchers.define :be_a_twirp_error do |*matchers, **meta_matcher|
       end
       actual.send(:validate_meta, discrete_attrs)
 
-
       @fail_msg = "Expected #{actual} to have meta: #{meta_matcher.inspect}, found #{actual.meta}"
       return false unless values_match?(meta_matcher, actual.meta)
     end
