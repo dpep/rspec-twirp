@@ -8,7 +8,7 @@ describe "be_a_twirp_request" do
   it "catches non-twirp requests" do
     expect {
       expect(Object).to be_a_twirp_request
-    }.to fail
+    }.to fail_with /Expected a Twirp request, found Object/
   end
 
   it "matches a specific request type" do
@@ -18,7 +18,7 @@ describe "be_a_twirp_request" do
   it "catches type mismatches" do
     expect {
       is_expected.to be_a_twirp_request(GoodbyeRequest)
-    }.to fail
+    }.to fail_with /request of type GoodbyeRequest/
   end
 
   it "catches erroneous request types" do
@@ -45,15 +45,19 @@ describe "be_a_twirp_request" do
     it "catches mismatches" do
       expect {
         is_expected.to be_a_twirp_request(GoodbyeRequest, name: "Bob")
-      }.to fail
+      }.to fail_with /request of type/
 
       expect {
         is_expected.to be_a_twirp_request(name: "nope")
-      }.to fail
+      }.to fail_with /to have name: "nope"/
+
+      expect {
+        is_expected.to be_a_twirp_request(name: /no/)
+      }.to fail_with /to have name: \/no\//
 
       expect {
         is_expected.to be_a_twirp_request(count: 1)
-      }.to fail
+      }.to fail_with /to have count: 1/
     end
 
     it "catches the erroneous attribute matches" do

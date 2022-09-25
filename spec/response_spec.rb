@@ -8,7 +8,7 @@ describe "be_a_twirp_response" do
   it "catches non-twirp response" do
     expect {
       expect(Object).to be_a_twirp_response
-    }.to fail
+    }.to fail_with /Expected a Twirp response, found Object/
   end
 
   it "matches a specific response type" do
@@ -18,7 +18,7 @@ describe "be_a_twirp_response" do
   it "catches type mismatches" do
     expect {
       is_expected.to be_a_twirp_request(GoodbyeResponse)
-    }.to fail
+    }.to fail_with /request of type GoodbyeResponse/
   end
 
   context "with attributes" do
@@ -34,11 +34,11 @@ describe "be_a_twirp_response" do
     it "catches mismatches" do
       expect {
         is_expected.to be_a_twirp_response(message: [ "" ])
-      }.to fail_with /message/
+      }.to fail_with /to have message/
 
       expect {
         is_expected.to be_a_twirp_response(message: [ "Hello" ])
-      }.to fail_with /message/
+      }.to fail_with /to have message/
     end
 
     it "catches the erroneous attributes" do

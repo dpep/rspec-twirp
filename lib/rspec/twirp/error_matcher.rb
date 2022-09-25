@@ -1,22 +1,23 @@
 RSpec::Matchers.define :be_a_twirp_error do |*matchers, **meta_matcher|
   match do |actual|
+    @fail_msg = "Expected #{actual} to be a Twirp::Error, found #{actual.class}"
     return false unless actual.is_a?(Twirp::Error)
 
     matchers.each do |matcher|
       case matcher
       when Symbol
         # match code
-        @cur_match = { code: matcher }
 
         unless Twirp::Error.valid_code?(matcher)
           raise ArgumentError, "invalid error code: #{matcher.inspect}"
         end
 
+        @fail_msg = "Expected #{actual} to have code: #{matcher.inspect}, found #{actual.code}"
         return false unless actual.code == matcher
       else
         # match msg
 
-        @cur_match = { msg: matcher }
+        @fail_msg = "Expected #{actual} to have msg: #{matcher.inspect}, found #{actual.msg}"
         return false unless values_match?(matcher, actual.msg)
       end
     end
@@ -31,6 +32,8 @@ RSpec::Matchers.define :be_a_twirp_error do |*matchers, **meta_matcher|
       end
       actual.send(:validate_meta, discrete_attrs)
 
+
+      @fail_msg = "Expected #{actual} to have meta: #{meta_matcher.inspect}, found #{actual.meta}"
       return false unless values_match?(meta_matcher, actual.meta)
     end
 
@@ -38,13 +41,10 @@ RSpec::Matchers.define :be_a_twirp_error do |*matchers, **meta_matcher|
   end
 
   description do
-    if @cur_match
-      key, value = @cur_match.first
-      "a Twirp::Error(#{key}: #{value.inspect})"
-    else
-      "a Twirp::Error"
-    end
+    "a Twirp::Error"
   end
+
+  failure_message { @fail_msg }
 end
 
 RSpec::Matchers.alias_matcher :a_twirp_error, :be_a_twirp_error

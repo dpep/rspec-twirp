@@ -10,7 +10,7 @@ describe "be_a_twirp_error" do
   it "catches type mismatches" do
     expect {
       expect(Object).to be_a_twirp_error
-    }.to fail
+    }.to fail_with /to be a Twirp::Error/
   end
 
   describe "code matches" do
@@ -35,11 +35,11 @@ describe "be_a_twirp_error" do
     it "catches mismatches" do
       expect {
         is_expected.to be_a_twirp_error("Not")
-      }.to fail_with /msg/
+      }.to fail_with /to have msg: "Not"/
 
       expect {
         is_expected.to be_a_twirp_error(/Nope/)
-      }.to fail_with /Nope/
+      }.to fail_with /to have msg: \/Nope\//
     end
   end
 
@@ -50,11 +50,11 @@ describe "be_a_twirp_error" do
     it "catches mismatches" do
       expect {
         is_expected.to be_a_twirp_error(is_meta: "false")
-      }.to fail_with /meta/
+      }.to fail_with /to have meta.*is_meta/
 
       expect {
         is_expected.to be_a_twirp_error(not_meta: "")
-      }.to fail_with /not_meta/
+      }.to fail_with /to have meta.*not_meta/
     end
 
     it "catches type errors" do
@@ -80,7 +80,7 @@ describe "be_a_twirp_error" do
 
       expect {
         is_expected.to be_a_twirp_error(:not_found, is_meta: "false")
-      }.to fail_with /is_meta/
+      }.to fail_with /false/
     end
   end
 end
