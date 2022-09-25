@@ -1,5 +1,6 @@
 require "rspec/expectations"
 
+require "rspec/twirp/client_response_matcher"
 require "rspec/twirp/error_matcher"
 require "rspec/twirp/request_matcher"
 require "rspec/twirp/response_matcher"

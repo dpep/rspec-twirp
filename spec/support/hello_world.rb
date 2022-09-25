@@ -18,7 +18,8 @@ pool.build do
   end
 
   add_message "GoodbyeResponse" do
-    optional :name, :string, 1
+    optional :message, :string, 1
+    optional :name, :string, 2
   end
 end
 
