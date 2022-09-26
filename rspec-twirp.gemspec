@@ -16,8 +16,9 @@ Gem::Specification.new do |s|
   s.files       = Dir.glob("lib/**/*")
   s.test_files  = Dir.glob("spec/**/*_spec.rb")
 
-  s.add_dependency "twirp"
+  s.add_dependency "google-protobuf", ">= 3"
   s.add_dependency "rspec-expectations", ">= 3"
+  s.add_dependency "twirp", ">= 1"
 
   s.add_development_dependency "byebug"
   s.add_development_dependency "codecov"

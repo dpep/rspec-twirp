@@ -1,6 +1,3 @@
-require "google/protobuf"
-require "twirp"
-
 pool = Google::Protobuf::DescriptorPool.new
 
 pool.build do

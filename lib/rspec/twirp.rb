@@ -1,4 +1,7 @@
+require "google/protobuf"
 require "rspec/expectations"
+require "twirp"
+
 require "rspec/twirp/client_response_matcher"
 require "rspec/twirp/error_matcher"
 require "rspec/twirp/request_matcher"
