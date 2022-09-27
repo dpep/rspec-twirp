@@ -1,30 +1,41 @@
 RSpec::Matchers.define :be_a_twirp_response do |type = nil, **attrs|
+  chain :with_error do |*matchers, **meta_matchers|
+    # code, msg, meta
+    @with_error = [ matchers, meta_matchers ]
+  end
+
   match do |actual|
-    # ensure type is a valid twirp response type
+    # ensure type is a valid twirp request type
     if type && !(type < Google::Protobuf::MessageExts)
-      raise ArgumentError, "Expected `type` to be a Twirp response, found: #{type}"
+      raise ArgumentError, "Expected `type` to be a Google::Protobuf::MessageExts, found: #{type}"
     end
 
-    @fail_msg = "Expected a Twirp response, found #{actual}"
-    return false unless actual.is_a?(Google::Protobuf::MessageExts)
+    @fail_msg = "Expected a Twirp::ClientResp, found #{actual}"
+    return false unless actual.is_a?(Twirp::ClientResp)
 
     # match expected response type
-    @fail_msg = "Expected a Twirp response of type #{type}, found #{actual.class}"
-    return false if type && actual.class != type
+    @fail_msg = "Expected a Twirp::ClientResp of type #{type}, found #{actual.data&.class}"
+    return false if type && actual.data&.class != type
 
-    return true if attrs.empty?
+    if @with_error
+      unless attrs.empty?
+        raise ArgumentError, "match data attributes or error, but not both"
+      end
 
-    RSpec::Twirp.validate_types(attrs, actual.class)
+      @fail_msg = "Expected #{actual} to have an error, but found none"
+      return false unless actual.error
 
-    # match attributes which are present
-    attrs.each do |attr_name, expected_attr|
-      actual_attr = actual.send(attr_name)
+      matchers, meta_matchers = @with_error
+      expect(actual.error).to be_a_twirp_error(*matchers, **meta_matchers)
+    else
+      @fail_msg = "Expected #{actual} to have data, but found none"
+      return false unless actual.data
 
-      @fail_msg = "Expected #{actual} to have #{attr_name}: #{expected_attr.inspect}, found #{actual_attr}"
-      return false unless values_match?(expected_attr, actual_attr)
+      expect(actual.data).to be_a_twirp_message(**attrs)
     end
-
-    true
+  rescue RSpec::Expectations::ExpectationNotMetError => err
+    @fail_msg = err.message
+    false
   end
 
   description do

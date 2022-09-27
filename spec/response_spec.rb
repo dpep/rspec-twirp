@@ -1,56 +1,112 @@
 describe "be_a_twirp_response" do
-  subject { HelloResponse.new(**attrs) }
+  context "with a response" do
+    subject { Twirp::ClientResp.new(GoodbyeResponse.new, nil) }
 
-  let(:attrs) { {} }
+    it { is_expected.to be_a_twirp_response }
 
-  it { is_expected.to be_a_twirp_response }
-
-  it "catches non-twirp response" do
-    expect {
-      expect(Object).to be_a_twirp_response
-    }.to fail_with /Expected a Twirp response, found Object/
-  end
-
-  it "matches a specific response type" do
-    is_expected.to be_a_twirp_request(HelloResponse)
-  end
-
-  it "catches type mismatches" do
-    expect {
-      is_expected.to be_a_twirp_request(GoodbyeResponse)
-    }.to fail_with /request of type GoodbyeResponse/
-  end
-
-  context "with attributes" do
-    let(:attrs) { { message: msg } }
-    let(:msg) { [ "Hello World" ] }
-
-    it { is_expected.to be_a_twirp_response(**attrs) }
-
-    it "supports regex matches" do
-      is_expected.to be_a_twirp_response(message: include(/Hello/))
+    it "catches non-twirp response" do
+      expect {
+        expect(Object).to be_a_twirp_response
+      }.to fail_with /found Object/
     end
 
-    it "catches mismatches" do
-      expect {
-        is_expected.to be_a_twirp_response(message: [ "" ])
-      }.to fail_with /to have message/
-
-      expect {
-        is_expected.to be_a_twirp_response(message: [ "Hello" ])
-      }.to fail_with /to have message/
-    end
-
-    it "catches the erroneous attributes" do
-      expect {
-        is_expected.to be_a_twirp_response(msg: [])
-      }.to raise_error(ArgumentError, /msg/)
+    it "matches a specific response type" do
+      is_expected.to be_a_twirp_response(GoodbyeResponse)
     end
 
     it "catches type mismatches" do
       expect {
-        is_expected.to be_a_twirp_response(message: "Hello World")
-      }.to raise_error(ArgumentError, /Expected array/)
+        is_expected.to be_a_twirp_response(HelloResponse)
+      }.to fail_with /of type HelloResponse/
+    end
+
+    it "catches erroneous response types" do
+      expect {
+        is_expected.to be_a_twirp_response(Object)
+      }.to raise_error(ArgumentError, /Object/)
+    end
+
+    context "with attributes" do
+      subject { Twirp::ClientResp.new(GoodbyeResponse.new(**attrs), nil) }
+
+      let(:attrs) { { message: "bye", name: "Bob" } }
+
+      it "can match attributes" do
+        is_expected.to be_a_twirp_response(GoodbyeResponse, **attrs)
+      end
+
+      it "supports regex matches" do
+        is_expected.to be_a_twirp_response(name: /^B/)
+      end
+
+      it "catches mismatches" do
+        expect {
+          is_expected.to be_a_twirp_response(name: "nope")
+        }.to fail_with /to have name: "nope"/
+
+        expect {
+          is_expected.to be_a_twirp_response(name: /no/)
+        }.to fail_with /to have name: \/no\//
+      end
+
+      it "catches the erroneous attributes" do
+        expect {
+          is_expected.to be_a_twirp_response(namezzz: "Bob")
+        }.to raise_error(ArgumentError, /namezzz/)
+      end
+
+      it "catches type mismatches" do
+        expect {
+          is_expected.to be_a_twirp_response(name: 123)
+        }.to raise_error(TypeError, /string field.*given Integer/)
+      end
+    end
+  end
+
+  context "with error" do
+    subject { Twirp::ClientResp.new(nil, error) }
+
+    let(:error) { Twirp::Error.new(code, msg, meta) }
+    let(:code) { :not_found }
+    let(:msg) { "Not Found" }
+    let(:meta) { { is_meta: "true" } }
+
+    it { is_expected.to be_a_twirp_response.with_error }
+    it { is_expected.to be_a_twirp_response.with_error(code) }
+    it { is_expected.to be_a_twirp_response.with_error(msg) }
+    it { is_expected.to be_a_twirp_response.with_error(**meta) }
+    it { is_expected.to be_a_twirp_response.with_error(/Not/) }
+
+    it "catches mismatches" do
+      expect {
+        is_expected.to be_a_twirp_response.with_error(:internal)
+      }.to fail_with /code: :internal/
+    end
+  end
+
+  context "with neither response nor error" do
+    subject { Twirp::ClientResp.new(nil, nil) }
+
+    it "fails the response match" do
+      expect {
+        is_expected.to be_a_twirp_response
+      }.to fail_with /to have data/
+    end
+
+    it "fails the error match" do
+      expect {
+        is_expected.to be_a_twirp_response.with_error
+      }.to fail_with /to have an error/
+    end
+  end
+
+  context "with both response and error" do
+    subject { Twirp::ClientResp.new(GoodbyeResponse.new, Twirp::Error.not_found("Not Found")) }
+
+    it "fails" do
+      expect {
+        is_expected.to be_a_twirp_response(name: "Bob").with_error
+      }.to raise_error(ArgumentError, /but not both/)
     end
   end
 end
