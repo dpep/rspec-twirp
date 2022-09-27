@@ -33,6 +33,7 @@ GoodbyeResponse = pool.lookup("GoodbyeResponse").msgclass
 class HelloWorldService < Twirp::Service
   service "HelloWorld"
   rpc :Hello, HelloRequest, HelloResponse, :ruby_method => :hello
+  rpc :Goodbye, GoodbyeRequest, GoodbyeResponse, :ruby_method => :goodbye
 end
 
 class HelloWorldClient < Twirp::Client
@@ -48,5 +49,9 @@ class HelloWorldHandler
     msg = ["Hello"] * (count - 1) + ["Hello #{req.name}"]
 
     { message: msg }
+  end
+
+  def goodbye(req, env)
+    { message: "bye", name: req.name }.compact
   end
 end
