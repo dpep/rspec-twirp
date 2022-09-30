@@ -1,6 +1,8 @@
 describe "be_a_twirp_response" do
   context "with a response" do
-    subject { Twirp::ClientResp.new(GoodbyeResponse.new, nil) }
+    subject { Twirp::ClientResp.new(response, nil) }
+
+    let(:response) { GoodbyeResponse.new }
 
     it { is_expected.to be_a_twirp_response }
 
@@ -12,6 +14,10 @@ describe "be_a_twirp_response" do
 
     it "matches a specific response type" do
       is_expected.to be_a_twirp_response(GoodbyeResponse)
+    end
+
+    it "matches a specific response" do
+      is_expected.to be_a_twirp_response(response)
     end
 
     it "catches type mismatches" do
@@ -59,6 +65,12 @@ describe "be_a_twirp_response" do
         expect {
           is_expected.to be_a_twirp_response(name: 123)
         }.to raise_error(TypeError, /string field.*given Integer/)
+      end
+
+      it "can't also match a specific response" do
+        expect {
+          is_expected.to be_a_twirp_response(response, name: "Bob")
+        }.to raise_error(ArgumentError, /but not both/)
       end
     end
   end

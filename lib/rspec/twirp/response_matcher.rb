@@ -6,8 +6,17 @@ RSpec::Matchers.define :be_a_twirp_response do |type = nil, **attrs|
 
   match do |actual|
     # ensure type is a valid twirp request type
-    if type && !(type < Google::Protobuf::MessageExts)
-      raise ArgumentError, "Expected `type` to be a Google::Protobuf::MessageExts, found: #{type}"
+    if type
+      if type.is_a?(Google::Protobuf::MessageExts)
+        unless attrs.empty?
+          raise ArgumentError, "Expected Google::Protobuf::MessageExts instance or attrs, but not both"
+        end
+
+        attrs = type.to_h
+        type = type.class
+      elsif !(type < Google::Protobuf::MessageExts)
+        raise ArgumentError, "Expected `type` to be a Google::Protobuf::MessageExts, found: #{type}"
+      end
     end
 
     @fail_msg = "Expected a Twirp::ClientResp, found #{actual}"
