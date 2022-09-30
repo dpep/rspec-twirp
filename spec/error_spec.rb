@@ -13,6 +13,18 @@ describe "be_a_twirp_error" do
     }.to fail_with /to be a Twirp::Error/
   end
 
+  describe "status matches" do
+    it { is_expected.to be_a_twirp_error(404) }
+
+    it { expect { is_expected.to be_a_twirp_error(400) }.to fail }
+
+    it "catches erroneous codes" do
+      expect {
+        is_expected.to be_a_twirp_error(123)
+      }.to raise_error(ArgumentError, /invalid error/)
+    end
+  end
+
   describe "code matches" do
     it { is_expected.to be_a_twirp_error(:not_found) }
 
@@ -61,6 +73,24 @@ describe "be_a_twirp_error" do
       expect {
         is_expected.to be_a_twirp_error(is_meta: true)
       }.to raise_error(ArgumentError, /meta values must be Strings/)
+    end
+  end
+
+  describe "instance matches" do
+    it "matches similar looking instances" do
+      error = Twirp::Error.new(code, msg, meta)
+      is_expected.to be_a_twirp_error(error)
+    end
+
+    it "catches mismatches" do
+      # no meta
+      expect {
+        is_expected.to be_a_twirp_error(Twirp::Error.not_found("Not Found"))
+      }.to fail
+
+      expect {
+        is_expected.to be_a_twirp_error(Twirp::Error.internal("boom"))
+      }.to fail
     end
   end
 

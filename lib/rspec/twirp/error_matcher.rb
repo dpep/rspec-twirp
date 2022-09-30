@@ -14,9 +14,22 @@ RSpec::Matchers.define :be_a_twirp_error do |*matchers, **meta_matcher|
 
         @fail_msg = "Expected #{actual} to have code: #{matcher.inspect}, found #{actual.code}"
         return false unless actual.code == matcher
+      when Integer
+        # match http status code
+
+        if code = Twirp::ERROR_CODES_TO_HTTP_STATUS.index(matcher)
+          @fail_msg = "Expected #{actual} to have status: #{matcher}, found #{actual.code}"
+          return false unless actual.code == code
+        else
+          raise ArgumentError, "invalid error status code: #{matcher}"
+        end
+      when Twirp::Error
+        # match instance
+
+        @fail_msg = "Expected #{actual} to equal #{matcher}"
+        return false unless values_match?(matcher.to_h, actual.to_h)
       else
         # match msg
-
         @fail_msg = "Expected #{actual} to have msg: #{matcher.inspect}, found #{actual.msg}"
         return false unless values_match?(matcher, actual.msg)
       end
