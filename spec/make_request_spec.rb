@@ -1,6 +1,6 @@
 describe "make_twirp_request" do
   let(:client) { HelloWorldClient.new(conn) }
-  let(:conn) { mock_twirp_connection("/HelloWorld/Hello", response) }
+  let(:conn) { mock_twirp_connection(response) }
   let!(:other_client) { HelloWorldClient.new(conn) }
   let(:request) { HelloRequest.new(name: "World", count: 3) }
   let(:response) { HelloResponse.new(message: ["Hello", "Hello", "Hello World"]) }

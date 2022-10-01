@@ -1,4 +1,6 @@
-def mock_twirp_connection(path, response = nil, **attrs)
+# GoodbyeClient.new(mock_twirp_connection)
+
+def mock_twirp_connection(response = nil, **attrs)
   unless response.nil? || attrs.empty?
     raise ArgumentError, "can not specify both response and attrs"
   end
@@ -7,21 +9,9 @@ def mock_twirp_connection(path, response = nil, **attrs)
     raise ArgumentError, "can not specify both block and args"
   end
 
-  # determine which client would make this rpc call
-  service_full_name, rpc_method = path.split("/").last(2)
-  client = ObjectSpace.each_object(Twirp::Client.singleton_class).find do |client|
-    next unless client.name
-
-    client.service_full_name == service_full_name && client.rpcs.key?(rpc_method)
-  end
-
-  unless client
-    raise ArgumentError, "could not determine Twirp::Client for: #{path}"
-  end
-
   Faraday.new do |conn|
     conn.adapter :test do |stub|
-      stub.post(path) do |env|
+      stub.post(/.*/) do |env|
         response = yield(env) if block_given?
         if response.is_a?(Hash)
           attrs = response
@@ -30,6 +20,19 @@ def mock_twirp_connection(path, response = nil, **attrs)
 
         if response.nil?
           # create default response
+
+          # determine which client would make this rpc call
+          service_full_name, rpc_method = env.url.path.split("/").last(2)
+          client = ObjectSpace.each_object(Twirp::Client.singleton_class).find do |client|
+            next unless client.name
+
+            client.service_full_name == service_full_name && client.rpcs.key?(rpc_method)
+          end
+
+          unless client
+            raise TypeError, "could not determine Twirp::Client for: #{env.url.path}"
+          end
+
           response = client.rpcs[rpc_method][:output_class].new(**attrs)
         end
 
