@@ -10,6 +10,8 @@ def mock_twirp_connection(path, response = nil, **attrs)
   # determine which client would make this rpc call
   service_full_name, rpc_method = path.split("/").last(2)
   client = ObjectSpace.each_object(Twirp::Client.singleton_class).find do |client|
+    next unless client.name
+
     client.service_full_name == service_full_name && client.rpcs.key?(rpc_method)
   end
 
