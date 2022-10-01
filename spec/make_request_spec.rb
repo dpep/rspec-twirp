@@ -51,7 +51,7 @@ describe "make_twirp_request" do
         }.to fail
       end
 
-      xit "catches type errors" do
+      it "catches type errors" do
         expect {
           expect { hello }.to make_twirp_request(Object)
         }.to raise_error(TypeError)
@@ -141,56 +141,29 @@ describe "make_twirp_request" do
     end
   end
 
-  # it "matches a rpc call" do
-  #   expect(client).to make_twirp_request
-  #   client.hello(HelloRequest.new)
-  # end
+  describe "inline mode" do
+    after { hello }
 
-  # it "matches a specific rpc method" do
-  #   expect(client).to make_twirp_request(:hello)
-  #   client.hello(HelloRequest.new)
-  # end
+    it { expect(client).to make_twirp_request }
 
-  # it "matches a specific rpc method by rpc name" do
-  #   expect(client).to make_twirp_request(:Hello)
-  #   client.hello(HelloRequest.new)
-  # end
+    it "matches a specific rpc method" do
+      expect(client).to make_twirp_request(:hello)
+    end
 
-  # describe ".with" do
-  #   let(:request) { HelloRequest.new(name: "Daniel") }
+    it "matches a specific rpc method by rpc name" do
+      expect(client).to make_twirp_request(:Hello)
+    end
 
-  #   it "matches the request message" do
-  #     expect(client).to make_twirp_request(:hello).with(request)
-  #     client.hello(request)
-  #   end
+    describe ".with" do
+      let(:request) { HelloRequest.new(name: "Daniel") }
 
-  #   it "matches the request arguments" do
-  #     expect(client).to make_twirp_request(:hello).with(name: "Daniel")
-  #     client.hello(request)
-  #   end
+      it "matches the request message" do
+        expect(client).to make_twirp_request(:hello).with(request)
+      end
 
-  #   it "matches when the request is made with arguments" do
-  #     expect(client).to make_twirp_request(:hello).with(request)
-  #     client.hello(name: "Daniel")
-  #   end
-
-  #   it "catches erroneous request types" do
-  #     expect {
-  #       expect(client).to make_twirp_request(:hello).with(GoodbyeRequest.new)
-  #     }.to raise_error(TypeError, /found GoodbyeRequest/)
-  #   end
-
-  #   it "catches mismatches" do
-  #     allow(client).to receive(:rpc)
-  #     client.hello(name: "Bob")
-  #     expect(client).to make_twirp_request(:hello, have_received: true).with(request)
-  #   end
-  # end
-
-  # context "with a response" do
-  #   subject { Twirp::ClientResp.new(GoodbyeResponse.new, nil) }
-
-  #   it { is_expected.to be_a_twirp_response }
-
-  # end
+      it "matches the request arguments" do
+        expect(client).to make_twirp_request(:hello).with(name: "Daniel")
+      end
+    end
+  end
 end

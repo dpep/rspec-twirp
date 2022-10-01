@@ -1,6 +1,8 @@
 # expect {
 #   do_the_thing
 # }.to make_twirp_request(client | service | rpc_method).with(request | attrs)
+#
+# expect(client).to make_twirp_request(rpc_method).with(...)
 
 RSpec::Matchers.define :make_twirp_request do |*matchers|
   chain :with do |request = nil, **attrs|
@@ -83,7 +85,7 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
         elsif matcher <= Twirp::Service
           expected_service = matcher.service_full_name
         else
-          raise NotImplementedError
+          raise TypeError
         end
       when String
         expected_rpc_name = be(matcher.to_sym)
@@ -137,10 +139,8 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
     end
   end
 
-  def match_client_request(client)
-    rpc_name = matchers.find do |matcher|
-      matcher.is_a?(String)
-    end
+  def match_client_request(client, matchers)
+    rpc_name = matchers.first.to_sym if matchers.any?
 
     if rpc_name
       rpc_info = client.class.rpcs.values.find do |x|
@@ -149,29 +149,41 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
 
       raise ArgumentError, "invalid rpc method: #{rpc_name}" unless rpc_info
 
-      input = case @request
-      when Google::Protobuf::MessageExts
-        unless @request.class == rpc_info[:input_class]
-          raise TypeError, "Expected a request of type `#{rpc_info[:input_class]}`, found #{@request.class}"
-        end
-
-        defaults = @request.class.new.to_h
-        hash_form = @request.to_h.reject {|k,v| v == defaults[k] }
-
-        eq(@request) | include(**hash_form)
-      when Hash
-        a_twirp_message(rpc_info[:input_class], **@request) | include(**@request)
-      else
-        be_a(rpc_info[:input_class]) | be_a(Hash)
-      end
-
       msg = "Expected #{client} to make a twirp request to #{rpc_name}"
-      expect(client).to receive(:rpc).with(rpc_info[:rpc_method], input, @request_opts), msg
+      rpc_matcher = eq(rpc_info[:rpc_method])
     else
-      # match any outgoing request
+      rpc_info = nil
       msg = "Expected #{client} to make a twirp request"
-      expect(client).to receive(:rpc), msg
+      rpc_matcher = anything
     end
+
+    expect(client).to receive(:rpc) do |rpc_name, input, req_opts|
+      expect(rpc_name).to match(rpc_matcher), msg
+      expect(@input_matcher.call(input)).to be(true), msg
+    end
+
+    #   input = case @request
+    #   when Google::Protobuf::MessageExts
+    #     unless @request.class == rpc_info[:input_class]
+    #       raise TypeError, "Expected a request of type `#{rpc_info[:input_class]}`, found #{@request.class}"
+    #     end
+
+    #     defaults = @request.class.new.to_h
+    #     hash_form = @request.to_h.reject {|k,v| v == defaults[k] }
+
+    #     eq(@request) | include(**hash_form)
+    #   when Hash
+    #     a_twirp_message(rpc_info[:input_class], **@request) | include(**@request)
+    #   else
+    #     be_a(rpc_info[:input_class]) | be_a(Hash)
+    #   end
+
+
+    #   expect(client).to receive(:rpc).with(rpc_info[:rpc_method], input, @request_opts), msg
+    # else
+    #   # match any outgoing request
+    #   expect(client).to receive(:rpc), msg
+    # end
   end
 
   description do
