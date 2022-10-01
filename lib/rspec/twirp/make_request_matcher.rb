@@ -31,11 +31,31 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
   end
 
   chain(:and_call_original) { @and_call_original = true }
+  chain(:and_return) do |arg|
+    @and_return = case arg
+    when Google::Protobuf::MessageExts
+      Twirp::ClientResp.new(arg, nil)
+    when Twirp::Error
+      Twirp::ClientResp.new(nil, arg)
+    when Class
+      if arg < Google::Protobuf::MessageExts
+        Twirp::ClientResp.new(arg.new, nil)
+      end
+    end
+
+    unless @and_return
+      raise TypeError, "Expected type `Google::Protobuf::MessageExts`, found #{arg}"
+    end
+  end
 
   supports_block_expectations
 
   match do |client_or_block|
     @input_matcher ||= ->(*){ true }
+
+    if @and_call_original && @and_return
+      raise ArgumentError, "use `and_call_original` or `and_return`, but not both"
+    end
 
     if client_or_block.is_a? Proc
       RSpec::Mocks.with_temporary_scope do
@@ -109,7 +129,11 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
         @twirp_request_made = true
       end
 
-      orig.call(rpc_name, input, req_opts) if @and_call_original
+      if @and_call_original
+        orig.call(rpc_name, input, req_opts)
+      elsif @and_return
+        @and_return
+      end
     end
   end
 
