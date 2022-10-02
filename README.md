@@ -1,4 +1,4 @@
-RSpecTwirp
+RSpec::Twirp
 ======
 ![Gem](https://img.shields.io/gem/dt/rspec-twirp?style=plastic)
 [![codecov](https://codecov.io/gh/dpep/rspec-twirp/branch/main/graph/badge.svg)](https://codecov.io/gh/dpep/rspec-twirp)
@@ -9,16 +9,34 @@ RSpec matches for Twirp.
 ```ruby
 require "rspec/twirp"
 
-it { is_expected.to be_a_twirp_request }
-it { is_expected.to be_a_twirp_request(name: /^Bo/ }
+it "can match Twirp messages" do
+  is_expected.to be_a_twirp_message
+  is_expected.to be_a_twirp_message(MyRequest)
+  is_expected.to be_a_twirp_message(name: /^B/)
+end
 
-it { is_expected.to be_a_twirp_response }
-it { is_expected.to be_a_twirp_response(message: "Hi Bob") }
+it "can match Twirp errors" do
+  is_expected.to be_a_twirp_error
+  is_expected.to be_a_twirp_error(:internal)
+end
 
-it { is_expected.to be_a_twirp_error }
-it { is_expected.to be_a_twirp_error(:internal) }
+it "can check Twirp responses" do
+  is_expected.to be_a_twirp_response
+  is_expected.to be_a_twirp_response(count: 3)
+  is_expected.to be_a_twirp_response.with_error(:not_found)
+end
 
-it { is_expected.to be_a_twirp_client_response.with_error }
+it "can intercept Twirp calls"
+  expect { ... }.to make_twirp_call
+  
+  expect { ... }.to make_twirp_call(MyService).with(param: "abc").and_return(MyResponse)
+end
+
+it "can mock client connections" do 
+  client = MyClient.new(mock_twirp_connection(MyResponse))
+  
+  expect(client.hello).to be_a_twirp_response(MyResponse)
+end
 ```
 
 
