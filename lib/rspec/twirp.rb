@@ -7,3 +7,17 @@ require "rspec/twirp/mock_connection"
 require "rspec/twirp/error_matcher"
 require "rspec/twirp/message_matcher"
 require "rspec/twirp/response_matcher"
+
+module RSpec
+  module Twirp
+    module Helpers
+      def mock_twirp_connection(...)
+        RSpec::Twirp.mock_connection(...)
+      end
+    end
+  end
+end
+
+RSpec.configure do |config|
+  config.include(RSpec::Twirp::Helpers)
+end
