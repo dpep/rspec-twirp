@@ -41,15 +41,13 @@ module RSpec
             end
 
             res = case response
-            when Google::Protobuf::MessageExts
-              response.to_proto
-            when ::Twirp::Error
+            when Google::Protobuf::MessageExts, ::Twirp::Error
               response
             when Class
               if response < Google::Protobuf::MessageExts
-                response.new.to_proto
+                response.new
               else
-                raise NotImplementedError
+                raise TypeError, "Expected type `Google::Protobuf::MessageExts`, found: #{response}"
               end
             when Symbol
               if ::Twirp::Error.valid_code?(response)
@@ -74,7 +72,7 @@ module RSpec
             else
               status = 200
               headers = { "Content-Type" => ::Twirp::Encoding::PROTO }
-              body = res
+              body = res.to_proto
             end
 
             [ status, headers, body ]
