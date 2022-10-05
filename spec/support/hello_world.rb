@@ -55,6 +55,7 @@ end
 class GoodbyeService < Twirp::Service
   service "Goodbye"
   rpc :Bye, GoodbyeRequest, GoodbyeResponse, :ruby_method => :bye
+  rpc :Goodbye, GoodbyeRequest, GoodbyeResponse, :ruby_method => :goodbye
 end
 
 class GoodbyeClient < Twirp::Client
@@ -64,5 +65,9 @@ end
 class GoodbyeHandler
   def bye(req, env)
     { message: "bye", name: req.name }.compact
+  end
+
+  def goodbye(...)
+    bye(...)
   end
 end

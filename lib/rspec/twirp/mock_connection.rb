@@ -40,39 +40,16 @@ module RSpec
               response = client.rpcs[rpc_method][:output_class].new(**attrs)
             end
 
-            res = case response
-            when Google::Protobuf::MessageExts, ::Twirp::Error
-              response
-            when Class
-              if response < Google::Protobuf::MessageExts
-                response.new
-              else
-                raise TypeError, "Expected type `Google::Protobuf::MessageExts`, found: #{response}"
-              end
-            when Symbol
-              if ::Twirp::Error.valid_code?(response)
-                ::Twirp::Error.new(response, response)
-              else
-                raise ArgumentError, "invalid error code: #{response}"
-              end
-            when Integer
-              if code = ::Twirp::ERROR_CODES_TO_HTTP_STATUS.index(response)
-                ::Twirp::Error.new(code, code)
-              else
-                raise ArgumentError, "invalid error code: #{response}"
-              end
-            else
-              raise NotImplementedError
-            end
+            res = RSpec::Twirp.generate_client_response(response)
 
-            if res.is_a?(::Twirp::Error)
-              status = ::Twirp::ERROR_CODES_TO_HTTP_STATUS[res.code]
-              headers = { "Content-Type" => ::Twirp::Encoding::JSON } # errors are always JSON
-              body = ::Twirp::Encoding.encode_json(res.to_h)
-            else
+            if res.data
               status = 200
               headers = { "Content-Type" => ::Twirp::Encoding::PROTO }
-              body = res.to_proto
+              body = res.data.to_proto
+            else
+              status = ::Twirp::ERROR_CODES_TO_HTTP_STATUS[res.error.code]
+              headers = { "Content-Type" => ::Twirp::Encoding::JSON } # errors are always JSON
+              body = ::Twirp::Encoding.encode_json(res.error.to_h)
             end
 
             [ status, headers, body ]

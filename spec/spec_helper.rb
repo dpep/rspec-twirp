@@ -30,3 +30,5 @@ RSpec.configure do |config|
 end
 
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f }
+
+Faraday.default_connection_options.request.timeout = 0.0001
