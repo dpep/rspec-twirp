@@ -32,10 +32,13 @@ it "can intercept Twirp calls"
   expect { ... }.to make_twirp_call(MyService).with(param: "abc").and_return(MyResponse)
 end
 
-it "can mock client connections" do 
-  client = MyClient.new(mock_twirp_connection(MyResponse))
+it "can mock client connections" do
+  client = MyClient.new(mock_twirp_connection)
+  expect(client.hello).to be_a_twirp_response(HelloResponse)
   
-  expect(client.hello).to be_a_twirp_response(MyResponse)
+  # or specify attributes
+  client = MyClient.new(mock_twirp_connection(name: "Daniel"))
+  expect(client.hello).to be_a_twirp_response(HelloResponse, name: "Daniel")
 end
 ```
 
