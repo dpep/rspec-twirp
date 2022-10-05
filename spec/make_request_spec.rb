@@ -154,6 +154,12 @@ describe "make_twirp_request" do
       expect(client).to make_twirp_request(:Hello)
     end
 
+    it "fails when client is not called within scope" do
+      expect_expectation_failure {
+        expect(client).to make_twirp_request
+      }
+    end
+
     describe ".with" do
       let(:request) { HelloRequest.new(name: "Daniel") }
 
@@ -163,6 +169,12 @@ describe "make_twirp_request" do
 
       it "matches the request arguments" do
         expect(client).to make_twirp_request(:hello).with(name: "Daniel")
+      end
+
+      it "fails when params don't match" do
+        expect_expectation_failure {
+          expect(client).to make_twirp_request.with(name: "Bob")
+        }
       end
     end
   end
