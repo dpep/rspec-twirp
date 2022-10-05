@@ -161,29 +161,6 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
       expect(rpc_name).to match(rpc_matcher), msg
       expect(@input_matcher.call(input)).to be(true), msg
     end
-
-    #   input = case @request
-    #   when Google::Protobuf::MessageExts
-    #     unless @request.class == rpc_info[:input_class]
-    #       raise TypeError, "Expected a request of type `#{rpc_info[:input_class]}`, found #{@request.class}"
-    #     end
-
-    #     defaults = @request.class.new.to_h
-    #     hash_form = @request.to_h.reject {|k,v| v == defaults[k] }
-
-    #     eq(@request) | include(**hash_form)
-    #   when Hash
-    #     a_twirp_message(rpc_info[:input_class], **@request) | include(**@request)
-    #   else
-    #     be_a(rpc_info[:input_class]) | be_a(Hash)
-    #   end
-
-
-    #   expect(client).to receive(:rpc).with(rpc_info[:rpc_method], input, @request_opts), msg
-    # else
-    #   # match any outgoing request
-    #   expect(client).to receive(:rpc), msg
-    # end
   end
 
   description do
