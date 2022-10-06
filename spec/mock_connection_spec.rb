@@ -9,7 +9,7 @@ describe :mock_twirp_connection do
   context "without a mock" do
     let(:conn) { "http://localhost:3000/twirp/Goodbye/Bye" }
 
-    it { expect { subject }.to raise_error(Faraday::ConnectionFailed) }
+    it { expect { subject }.to raise_error(Faraday::Error) }
   end
 
   describe "with a response instance" do

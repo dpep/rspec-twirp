@@ -5,30 +5,26 @@
 # expect(client).to make_twirp_request(rpc_method).with(...)
 
 RSpec::Matchers.define :make_twirp_request do |*matchers|
-  chain :with do |request = nil, **attrs|
-    unless !!request ^ attrs.any?
-      raise ArgumentError, "specify request or attributes, but not both"
-    end
-
-    @input_matcher = if request
-      if request.is_a?(Google::Protobuf::MessageExts)
-        defaults = request.class.new.to_h
-        hash_form = request.to_h.reject {|k,v| v == defaults[k] }
+  chain :with do |input_matcher = nil|
+    @input_matcher = if input_matcher
+      if input_matcher.is_a?(Google::Protobuf::MessageExts)
+        defaults = input_matcher.class.new.to_h
+        hash_form = input_matcher.to_h.reject {|k,v| v == defaults[k] }
 
         ->(input) do
           if input.is_a?(Google::Protobuf::MessageExts)
-            values_match?(request, input)
+            values_match?(input_matcher, input)
           else
             values_match?(include(**hash_form), input.to_h)
           end
         end
-      elsif request.is_a?(Class) && request < Google::Protobuf::MessageExts
-        ->(input) { values_match?(be_a(request), input) }
+      elsif input_matcher.is_a?(Class) && input_matcher < Google::Protobuf::MessageExts
+        ->(input) { values_match?(be_a(input_matcher), input) }
+      elsif input_matcher.is_a?(Hash)
+        ->(input) { values_match?(include(**input_matcher), input.to_h) }
       else
-        raise TypeError, "Expected a request of type `Google::Protobuf::MessageExts`, found #{request.class}"
+        raise TypeError, "Expected an input_matcher of type `Google::Protobuf::MessageExts`, found #{input_matcher.class}"
       end
-    elsif attrs.any?
-      ->(input) { values_match?(include(**attrs), input.to_h) }
     end
   end
 
