@@ -4,25 +4,18 @@ module RSpec
   module Twirp
     extend self
 
-    def mock_connection(response = nil, **attrs)
-      unless response.nil? || attrs.empty?
-        raise ArgumentError, "can not specify both response and attrs"
-      end
-
-      if block_given? && (response || attrs.any?)
-        raise ArgumentError, "can not specify both block and args"
+    def mock_connection(response = nil)
+      if block_given? && response
+        raise ArgumentError, "can not specify both block and response"
       end
 
       Faraday.new do |conn|
         conn.adapter :test do |stub|
           stub.post(/.*/) do |env|
             response = yield(env) if block_given?
-            if response.is_a?(Hash)
-              attrs = response
-              response = nil
-            end
+            response ||= {}
 
-            if response.nil?
+            if response.is_a?(Hash)
               # create default response
 
               # determine which client would make this rpc call
@@ -37,7 +30,7 @@ module RSpec
                 raise TypeError, "could not determine Twirp::Client for: #{env.url.path}"
               end
 
-              response = client.rpcs[rpc_method][:output_class].new(**attrs)
+              response = client.rpcs[rpc_method][:output_class].new(**response)
             end
 
             res = RSpec::Twirp.generate_client_response(response)
