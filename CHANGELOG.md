@@ -1,3 +1,14 @@
+###  v0.2.0  (2022-10-06)
+- ruby 3 fixes
+- mock_client
+- improved make_request spec
+- upgrade mock connection
+- inline request matcher
+- request matcher and_return
+- make request matcher
+- mock_twirp_connection
+- twirp message matcher simplification
+
 ###  v0.1.0  (2022-09-24)
 - Update README.md
 - client response matcher
