@@ -17,7 +17,7 @@ RSpec::Matchers.define :be_a_twirp_error do |*matchers, **meta_matcher|
       when Integer
         # match http status code
 
-        if code = Twirp::ERROR_CODES_TO_HTTP_STATUS.index(matcher)
+        if code = Twirp::ERROR_CODES_TO_HTTP_STATUS.key(matcher)
           @fail_msg = "Expected #{actual} to have status: #{matcher}, found #{actual.code}"
           return false unless actual.code == code
         else

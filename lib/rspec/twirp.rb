@@ -31,7 +31,7 @@ module RSpec
           raise ArgumentError, "invalid error code: #{arg}"
         end
       when Integer
-        if code = ::Twirp::ERROR_CODES_TO_HTTP_STATUS.index(arg)
+        if code = ::Twirp::ERROR_CODES_TO_HTTP_STATUS.key(arg)
           ::Twirp::Error.new(code, code)
         else
           raise ArgumentError, "invalid error code: #{arg}"
