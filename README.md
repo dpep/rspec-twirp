@@ -40,6 +40,15 @@ it "can mock client connections" do
   client = MyClient.new(mock_twirp_connection(name: "Daniel"))
   expect(client.hello).to be_a_twirp_response(HelloResponse, name: "Daniel")
 end
+
+it "can mock clients" do 
+  client = mock_twirp_client(HelloClient)
+  expect(client.hello).to be_a_twirp_response(HelloResponse)
+  
+  # or specify attributes
+  client = mock_twirp_client(HelloClient, name: "Shira")
+  expect(client.hello).to be_a_twirp_response(name: "Shira")
+end
 ```
 
 
