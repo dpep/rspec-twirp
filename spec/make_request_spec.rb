@@ -177,5 +177,19 @@ describe "make_twirp_request" do
         }
       end
     end
+
+    describe ".and_return" do
+      it "stubs the response" do
+        expect(client).to make_twirp_request.and_return(response)
+        expect(hello).to be_a_twirp_response(response)
+      end
+
+      it "stubs the response with attributes" do
+        resp = { message: ["Hi"] }
+
+        expect(client).to make_twirp_request.and_return(resp)
+        expect(hello).to be_a_twirp_response(resp)
+      end
+    end
   end
 end

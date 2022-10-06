@@ -29,22 +29,7 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
   end
 
   chain(:and_call_original) { @and_call_original = true }
-  chain(:and_return) do |arg|
-    @and_return = case arg
-    when Google::Protobuf::MessageExts
-      Twirp::ClientResp.new(arg, nil)
-    when Twirp::Error
-      Twirp::ClientResp.new(nil, arg)
-    when Class
-      if arg < Google::Protobuf::MessageExts
-        Twirp::ClientResp.new(arg.new, nil)
-      end
-    end
-
-    unless @and_return
-      raise TypeError, "Expected type `Google::Protobuf::MessageExts`, found #{arg}"
-    end
-  end
+  chain(:and_return) { |arg| @and_return = arg }
 
   supports_block_expectations
 
@@ -64,6 +49,14 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
     else
       raise ArgumentError, "Expected Twirp::Client or block, found: #{client_or_block}"
     end
+  end
+
+  def twirp_request_made!
+    @twirp_request_made = true
+  end
+
+  def twirp_request_made?
+    !!@twirp_request_made
   end
 
   def match_block_request(block, matchers)
@@ -92,8 +85,6 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
       end
     end
 
-    @twirp_request_made = false
-
     # stub pre-existing client instances
     ObjectSpace.each_object(Twirp::Client) do |client|
       if expected_client === client && (expected_service === client.class.service_full_name)
@@ -118,19 +109,25 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
 
     block.call
 
-    @twirp_request_made
+    twirp_request_made?
   end
 
   def stub_client(client, rpc_matcher)
     allow(client).to receive(:rpc).and_wrap_original do |orig, rpc_name, input, req_opts|
       if values_match?(rpc_matcher, rpc_name) && @input_matcher.call(input)
-        @twirp_request_made = true
+        twirp_request_made!
       end
 
       if @and_call_original
         orig.call(rpc_name, input, req_opts)
       elsif @and_return
-        @and_return
+        response = if @and_return.is_a?(Hash)
+          client.class.rpcs[rpc_name.to_s][:output_class].new(**@and_return)
+        else
+          @and_return
+        end
+
+        RSpec::Twirp.generate_client_response(response)
       end
     end
   end
@@ -148,14 +145,25 @@ RSpec::Matchers.define :make_twirp_request do |*matchers|
       msg = "Expected #{client} to make a twirp request to #{rpc_name}"
       rpc_matcher = eq(rpc_info[:rpc_method])
     else
-      rpc_info = nil
       msg = "Expected #{client} to make a twirp request"
       rpc_matcher = anything
     end
 
-    expect(client).to receive(:rpc) do |rpc_name, input, req_opts|
+    expect(client).to receive(:rpc).at_least(1) do |rpc_name, input, req_opts|
       expect(rpc_name).to match(rpc_matcher), msg
       expect(@input_matcher.call(input)).to be(true), msg
+
+      if @and_call_original
+        orig.call(rpc_name, input, req_opts)
+      elsif @and_return
+        response = if @and_return.is_a?(Hash)
+          client.class.rpcs[rpc_name.to_s][:output_class].new(**@and_return)
+        else
+          @and_return
+        end
+
+        RSpec::Twirp.generate_client_response(response)
+      end
     end
   end
 
