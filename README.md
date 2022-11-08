@@ -3,7 +3,7 @@ RSpec::Twirp
 ![Gem](https://img.shields.io/gem/dt/rspec-twirp?style=plastic)
 [![codecov](https://codecov.io/gh/dpep/rspec-twirp/branch/main/graph/badge.svg)](https://codecov.io/gh/dpep/rspec-twirp)
 
-RSpec matches for Twirp.
+RSpec matchers for Twirp.
 
 
 ```ruby
