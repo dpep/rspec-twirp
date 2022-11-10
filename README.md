@@ -27,9 +27,9 @@ it "can check Twirp responses" do
 end
 
 it "can intercept Twirp calls"
-  expect { ... }.to make_twirp_call
+  expect { ... }.to make_twirp_request
   
-  expect { ... }.to make_twirp_call(MyService).with(param: "abc").and_return(MyResponse)
+  expect { ... }.to make_twirp_request(MyService).with(param: "abc").and_return(MyResponse)
 end
 
 it "can mock client connections" do
