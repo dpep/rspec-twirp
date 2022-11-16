@@ -57,7 +57,7 @@ describe "be_a_twirp_response" do
     it "catches mismatches" do
       expect {
         is_expected.to be_a_twirp_response.with_error(:internal)
-      }.to fail_with /code: :internal/
+      }.to fail_with /to have code `:internal`/
     end
   end
 

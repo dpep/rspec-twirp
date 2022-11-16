@@ -20,7 +20,18 @@ describe "be_a_twirp_error" do
   describe "status matches" do
     it { is_expected.to be_a_twirp_error(404) }
 
-    it { expect { is_expected.to be_a_twirp_error(400) }.to fail }
+    it "catches mismatches" do
+      expect {
+        is_expected.to be_a_twirp_error(400)
+      }.to fail_including(
+        "to have status 400",
+        "found: 404",
+
+        # diff
+        "-:code => :invalid_argument,",
+        "+:code => :not_found,",
+      )
+    end
 
     it "catches erroneous codes" do
       expect {
@@ -32,7 +43,18 @@ describe "be_a_twirp_error" do
   describe "code matches" do
     it { is_expected.to be_a_twirp_error(:not_found) }
 
-    it { expect { is_expected.to be_a_twirp_error(:unknown) }.to fail }
+    it "catches mismatches" do
+      expect {
+        is_expected.to be_a_twirp_error(:unknown)
+      }.to fail_including(
+        "to have code `:unknown`",
+        "found: :not_found",
+
+        # diff
+        "-:code => :unknown,",
+        "+:code => :not_found,",
+      )
+    end
 
     it "catches erroneous codes" do
       expect {
@@ -51,11 +73,22 @@ describe "be_a_twirp_error" do
     it "catches mismatches" do
       expect {
         is_expected.to be_a_twirp_error("Not")
-      }.to fail_with /to have msg: "Not"/
+      }.to fail_including(
+        'to have msg "Not"',
+        'found: "Not Found"',
+
+        # diff
+        '-:msg => "Not",',
+        '+:msg => "Not Found",',
+      )
 
       expect {
         is_expected.to be_a_twirp_error(/Nope/)
-      }.to fail_with /to have msg: \/Nope\//
+      }.to fail_including(
+        # diff
+        '-:msg => /Nope/,',
+        '+:msg => "Not Found",',
+      )
     end
   end
 
@@ -66,7 +99,13 @@ describe "be_a_twirp_error" do
     it "catches mismatches" do
       expect {
         is_expected.to be_a_twirp_error(is_meta: "false")
-      }.to fail_with /to have meta.*is_meta/
+      }.to fail_including(
+        "to have meta",
+
+        # diff
+        '-:meta => {:is_meta=>"false"},',
+        '+:meta => {:is_meta=>"true"},',
+      )
 
       expect {
         is_expected.to be_a_twirp_error(not_meta: "")
