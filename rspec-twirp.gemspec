@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Daniel Pepper"]
   s.summary     = package.to_s
   s.description = "Twirp RSpec matchers"
-  s.homepage    = "https://github.com/dpep/#{package_name}_rb"
+  s.homepage    = "https://github.com/dpep/#{package_name}"
   s.license     = "MIT"
 
   s.files       = Dir.glob("lib/**/*")
