@@ -1,3 +1,7 @@
+###  v0.3.0  (2022-11-16)
+- diffable error matching
+- extract request stubbing
+
 ###  v0.2.0  (2022-10-06)
 - ruby 3 fixes
 - mock_client
