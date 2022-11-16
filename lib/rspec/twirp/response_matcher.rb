@@ -1,30 +1,12 @@
-RSpec::Matchers.define :be_a_twirp_response do |type = nil, **attrs|
+RSpec::Matchers.define :be_a_twirp_response do |**attrs|
   chain :with_error do |*matchers, **meta_matchers|
     # code, msg, meta
     @with_error = [ matchers, meta_matchers ]
   end
 
   match do |actual|
-    # ensure type is a valid twirp request type
-    if type
-      if type.is_a?(Google::Protobuf::MessageExts)
-        unless attrs.empty?
-          raise ArgumentError, "Expected Google::Protobuf::MessageExts instance or attrs, but not both"
-        end
-
-        attrs = type.to_h
-        type = type.class
-      elsif !(type < Google::Protobuf::MessageExts)
-        raise ArgumentError, "Expected `type` to be a Google::Protobuf::MessageExts, found: #{type}"
-      end
-    end
-
     @fail_msg = "Expected a Twirp::ClientResp, found #{actual}"
     return false unless actual.is_a?(Twirp::ClientResp)
-
-    # match expected response type
-    @fail_msg = "Expected a Twirp::ClientResp of type #{type}, found #{actual.data&.class}"
-    return false if type && actual.data&.class != type
 
     if @with_error
       unless attrs.empty?
@@ -48,7 +30,7 @@ RSpec::Matchers.define :be_a_twirp_response do |type = nil, **attrs|
   end
 
   description do
-    type ? "a #{type} Twirp response" : "a Twirp response"
+    "a Twirp response"
   end
 
   failure_message { @fail_msg }

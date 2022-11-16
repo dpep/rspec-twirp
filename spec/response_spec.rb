@@ -6,39 +6,16 @@ describe "be_a_twirp_response" do
 
     it { is_expected.to be_a_twirp_response }
 
-    it "catches non-twirp response" do
-      expect {
-        expect(Object).to be_a_twirp_response
-      }.to fail_with /found Object/
-    end
-
-    it "matches a specific response type" do
-      is_expected.to be_a_twirp_response(GoodbyeResponse)
-    end
-
-    it "matches a specific response" do
-      is_expected.to be_a_twirp_response(response)
-    end
-
-    it "catches type mismatches" do
-      expect {
-        is_expected.to be_a_twirp_response(HelloResponse)
-      }.to fail_with /of type HelloResponse/
-    end
-
-    it "catches erroneous response types" do
-      expect {
-        is_expected.to be_a_twirp_response(Object)
-      }.to raise_error(ArgumentError, /Object/)
+    it "handles non-twirp response" do
+      expect(Object).not_to be_a_twirp_response
     end
 
     context "with attributes" do
-      subject { Twirp::ClientResp.new(GoodbyeResponse.new(**attrs), nil) }
-
+      let(:response) { GoodbyeResponse.new(**attrs) }
       let(:attrs) { { message: "bye", name: "Bob" } }
 
       it "can match attributes" do
-        is_expected.to be_a_twirp_response(GoodbyeResponse, **attrs)
+        is_expected.to be_a_twirp_response(**attrs)
       end
 
       it "supports regex matches" do
@@ -48,29 +25,17 @@ describe "be_a_twirp_response" do
       it "catches mismatches" do
         expect {
           is_expected.to be_a_twirp_response(name: "nope")
-        }.to fail_with /to have name: "nope"/
+        }.to fail_including(
+          '-:name => "nope",',
+          '+:name => "Bob",',
+        )
 
         expect {
           is_expected.to be_a_twirp_response(name: /no/)
-        }.to fail_with /to have name: \/no\//
-      end
-
-      it "catches the erroneous attributes" do
-        expect {
-          is_expected.to be_a_twirp_response(namezzz: "Bob")
-        }.to raise_error(ArgumentError, /namezzz/)
-      end
-
-      it "catches type mismatches" do
-        expect {
-          is_expected.to be_a_twirp_response(name: 123)
-        }.to raise_error(TypeError, /string field.*given Integer/)
-      end
-
-      it "can't also match a specific response" do
-        expect {
-          is_expected.to be_a_twirp_response(response, name: "Bob")
-        }.to raise_error(ArgumentError, /but not both/)
+        }.to fail_including(
+          '-:name => /no/,',
+          '+:name => "Bob",',
+        )
       end
     end
   end
@@ -115,7 +80,7 @@ describe "be_a_twirp_response" do
   context "with both response and error" do
     subject { Twirp::ClientResp.new(GoodbyeResponse.new, Twirp::Error.not_found("Not Found")) }
 
-    it "fails" do
+    it "does not permit both attr and error matching" do
       expect {
         is_expected.to be_a_twirp_response(name: "Bob").with_error
       }.to raise_error(ArgumentError, /but not both/)

@@ -1,5 +1,5 @@
 describe "be_a_twirp_message" do
-  subject { HelloRequest.new(**attrs) }
+  subject(:request) { HelloRequest.new(**attrs) }
 
   let(:attrs) { {} }
 
@@ -10,13 +10,11 @@ describe "be_a_twirp_message" do
   end
 
   it "supports compound matchers" do
-    expect([ subject ]).to include(a_twirp_message)
+    expect([ request ]).to include(a_twirp_message)
   end
 
-  it "catches non-twirp subjects" do
-    expect {
-      expect(Object).to be_a_twirp_message
-    }.to fail_with /Expected a Twirp message, found Object/
+  it "does not match non-twirp subjects" do
+    expect(Object).not_to be_a_twirp_message
   end
 
   it "matches a specific message type" do
@@ -24,9 +22,7 @@ describe "be_a_twirp_message" do
   end
 
   it "catches type mismatches" do
-    expect {
-      is_expected.to be_a_twirp_message(GoodbyeRequest)
-    }.to fail_with /message of type GoodbyeRequest/
+    is_expected.not_to be_a_twirp_message(GoodbyeRequest)
   end
 
   it "catches erroneous message types" do
@@ -55,29 +51,19 @@ describe "be_a_twirp_message" do
         is_expected.to be_a_twirp_message(GoodbyeRequest, name: "Bob")
       }.to fail_with /message of type/
 
-      expect {
-        is_expected.to be_a_twirp_message(name: "nope")
-      }.to fail_with /to have name: "nope"/
+      is_expected.not_to be_a_twirp_message(name: "nope")
 
-      expect {
-        is_expected.to be_a_twirp_message(name: /no/)
-      }.to fail_with /to have name: \/no\//
+      is_expected.not_to be_a_twirp_message(name: /no/)
 
-      expect {
-        is_expected.to be_a_twirp_message(count: 1)
-      }.to fail_with /to have count: 1/
+      is_expected.not_to be_a_twirp_message(count: 1)
     end
 
-    it "catches the erroneous attribute matches" do
-      expect {
-        is_expected.to be_a_twirp_message(namezzz: "Bob")
-      }.to raise_error(ArgumentError, /namezzz/)
+    it "catches erroneous attribute matches" do
+      is_expected.not_to be_a_twirp_message(namezzz: "Bob")
     end
 
-    it "catches type mismatches" do
-      expect {
-        is_expected.to be_a_twirp_message(name: 123)
-      }.to raise_error(TypeError, /string field.*given Integer/)
+    it "handles type mismatches" do
+      is_expected.not_to be_a_twirp_message(name: 123)
     end
   end
 end

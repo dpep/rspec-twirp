@@ -1,11 +1,15 @@
 describe "be_a_twirp_error" do
-  subject { Twirp::Error.new(code, msg, meta) }
+  subject(:error) { Twirp::Error.new(code, msg, meta) }
 
   let(:code) { :not_found }
   let(:msg) { "Not Found" }
   let(:meta) { { is_meta: "true" } }
 
   it { is_expected.to be_a_twirp_error }
+
+  it "is composable" do
+    expect(e: error).to include(e: a_twirp_error)
+  end
 
   it "catches type mismatches" do
     expect {

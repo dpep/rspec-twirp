@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = package.const_get "VERSION"
   s.authors     = ["Daniel Pepper"]
   s.summary     = package.to_s
-  s.description = "..."
+  s.description = "Twirp RSpec matchers"
   s.homepage    = "https://github.com/dpep/#{package_name}_rb"
   s.license     = "MIT"
 
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "google-protobuf", ">= 3"
   s.add_dependency "rspec", ">= 3"
+  s.add_dependency "rspec-protobuf", ">= 0.2"
   s.add_dependency "twirp", ">= 1"
 
   s.add_development_dependency "byebug"
