@@ -27,7 +27,7 @@ it "can check Twirp responses" do
 end
 ```
 
-To stub Twirp requests, see `webmock-twirp`.
+To stub Twirp requests, see [webmock-twirp](https://github.com/dpep/webmock-twirp).
 
 
 ----
