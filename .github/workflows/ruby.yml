@@ -1,4 +1,4 @@
-name: Ruby checks
+name: Ruby
 
 on:
   push:
