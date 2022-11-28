@@ -24,7 +24,7 @@ jobs:
             echo "PR already approved"
           fi
       - name: Enable auto-merge
-        if: success()
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
         run: gh pr merge --auto --squash
 
 permissions:
