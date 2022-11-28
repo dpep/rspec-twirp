@@ -1,10 +1,8 @@
-# install dependencies and run tests
-# https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+name: Ruby checks
 
 on:
   push:
-    paths-ignore:
-      - '**.md'
+    branches: [ "main" ]
   pull_request:
     types: [ opened, edited, synchronize ]
 
