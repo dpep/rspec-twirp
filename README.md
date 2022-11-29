@@ -9,21 +9,21 @@ Twirp RSpec matchers.
 ```ruby
 require "rspec/twirp"
 
-it "can match Twirp messages" do
+it "matches Twirp responses" do
+  is_expected.to be_a_twirp_response
+  is_expected.to be_a_twirp_response(count: 3)
+  is_expected.to be_a_twirp_response.with_error(:not_found)
+end
+
+it "matches Twirp messages" do
   is_expected.to be_a_twirp_message
   is_expected.to be_a_twirp_message(MyRequest)
   is_expected.to be_a_twirp_message(name: /^B/)
 end
 
-it "can match Twirp errors" do
+it "matches Twirp errors" do
   is_expected.to be_a_twirp_error
   is_expected.to be_a_twirp_error(:internal)
-end
-
-it "can check Twirp responses" do
-  is_expected.to be_a_twirp_response
-  is_expected.to be_a_twirp_response(count: 3)
-  is_expected.to be_a_twirp_response.with_error(:not_found)
 end
 ```
 
