@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rspec-twirp (0.3.0)
+    rspec-twirp (0.3.1)
       google-protobuf (>= 3)
       rspec-expectations (>= 3)
       rspec-protobuf (>= 0.2)
