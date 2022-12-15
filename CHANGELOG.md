@@ -1,3 +1,10 @@
+###  v0.3.1  (2022-12-15)
+- simplify dependencies
+- action permissions
+- dependabot automation
+- lockfile
+- builds
+
 ###  v0.3.0  (2022-11-16)
 - diffable error matching
 - extract request stubbing
