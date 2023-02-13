@@ -16,32 +16,13 @@ GEM
       simplecov
     diff-lcs (1.5.0)
     docile (1.4.0)
-    faraday (1.10.2)
-      faraday-em_http (~> 1.0)
-      faraday-em_synchrony (~> 1.0)
-      faraday-excon (~> 1.1)
-      faraday-httpclient (~> 1.0)
-      faraday-multipart (~> 1.0)
-      faraday-net_http (~> 1.0)
-      faraday-net_http_persistent (~> 1.0)
-      faraday-patron (~> 1.0)
-      faraday-rack (~> 1.0)
-      faraday-retry (~> 1.0)
+    faraday (2.7.4)
+      faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
-    faraday-em_http (1.0.0)
-    faraday-em_synchrony (1.0.0)
-    faraday-excon (1.1.0)
-    faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.4)
-      multipart-post (~> 2)
-    faraday-net_http (1.0.1)
-    faraday-net_http_persistent (1.2.0)
-    faraday-patron (1.0.0)
-    faraday-rack (1.0.0)
-    faraday-retry (1.0.3)
+    faraday-net_http (3.0.2)
     google-protobuf (3.21.12)
     json (2.6.3)
-    multipart-post (2.2.3)
+    rack (3.0.4.1)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
@@ -65,8 +46,8 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    twirp (1.9.0)
-      faraday (< 2)
+    twirp (1.10.0)
+      faraday (< 3)
       google-protobuf (~> 3.0, >= 3.7.0)
 
 PLATFORMS
@@ -75,9 +56,11 @@ PLATFORMS
 DEPENDENCIES
   byebug
   codecov
+  rack
   rspec (>= 3)
   rspec-twirp!
   simplecov
+  twirp
 
 BUNDLED WITH
    2.3.9
