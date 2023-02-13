@@ -1,3 +1,6 @@
+###  v0.4.0  (2023-02-12)
+- support for twirp 1.10
+
 ###  v0.3.1  (2022-12-15)
 - simplify dependencies
 - action permissions
