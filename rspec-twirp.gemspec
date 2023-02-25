@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.summary     = package.to_s
   s.version     = package.const_get "VERSION"
 
-  s.add_dependency "google-protobuf", ">= 3"
   s.add_dependency "rspec-expectations", ">= 3"
   s.add_dependency "rspec-protobuf", ">= 0.2"
   s.add_dependency "twirp", ">= 1"
