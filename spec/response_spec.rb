@@ -1,6 +1,6 @@
 describe "be_a_twirp_response" do
   context "with a response" do
-    subject { client_response(data: response) }
+    subject { Twirp::ClientResp.new(data: response) }
 
     let(:response) { GoodbyeResponse.new }
 
@@ -41,7 +41,7 @@ describe "be_a_twirp_response" do
   end
 
   context "with error" do
-    subject { client_response(error: error) }
+    subject { Twirp::ClientResp.new(error: error) }
 
     let(:error) { Twirp::Error.new(code, msg, meta) }
     let(:code) { :not_found }
@@ -62,7 +62,7 @@ describe "be_a_twirp_response" do
   end
 
   context "with neither response nor error" do
-    subject { client_response }
+    subject { Twirp::ClientResp.new }
 
     it "fails the response match" do
       expect {
@@ -78,7 +78,12 @@ describe "be_a_twirp_response" do
   end
 
   context "with both response and error" do
-    subject { client_response(data: GoodbyeResponse.new, error: Twirp::Error.not_found("Not Found")) }
+    subject do
+      Twirp::ClientResp.new(
+        data: GoodbyeResponse.new,
+        error: Twirp::Error.not_found("Not Found"),
+      )
+    end
 
     it "does not permit both attr and error matching" do
       expect {
