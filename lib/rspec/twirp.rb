@@ -1,4 +1,3 @@
-require "google/protobuf"
 require "rspec/expectations"
 require "rspec/protobuf"
 require "twirp"

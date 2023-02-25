@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    rspec-twirp (0.0.1)
-      google-protobuf (>= 3)
+    rspec-twirp (0.4.0)
       rspec-expectations (>= 3)
       rspec-protobuf (>= 0.2)
       twirp (>= 1)
@@ -55,7 +54,6 @@ DEPENDENCIES
   rspec (>= 3)
   rspec-twirp!
   simplecov
-  twirp
 
 BUNDLED WITH
    2.3.9
