@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.version     = package.const_get "VERSION"
 
   s.add_dependency "rspec-expectations", ">= 3"
-  s.add_dependency "rspec-protobuf", ">= 0.2"
+  s.add_dependency "rspec-protobuf", ">= 0.3"
   s.add_dependency "twirp", ">= 1"
 
   s.add_development_dependency "byebug"
