@@ -1,3 +1,8 @@
+###  v0.4.1  (2023-03-28)
+- bump gems
+- simplify (#17)
+- codecov upgrade
+
 ###  v0.4.0  (2023-02-12)
 - support for twirp 1.10
 
