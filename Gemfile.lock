@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rspec-twirp (0.4.1)
+    rspec-twirp (0.0.1)
       rspec-expectations (>= 3)
       rspec-protobuf (>= 0.3)
       twirp (>= 1)
@@ -17,7 +17,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     google-protobuf (3.24.2)
-    rack (3.0.9)
+    rack (3.0.10)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
