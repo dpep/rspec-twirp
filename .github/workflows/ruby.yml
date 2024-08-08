@@ -2,9 +2,8 @@ name: Ruby
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    types: [ opened, edited, synchronize ]
 
 jobs:
   test:
@@ -29,3 +28,5 @@ jobs:
         run: bundle exec rspec
       - name: upload code coverage
         uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
