@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rspec-twirp (0.4.1)
+    rspec-twirp (0.0.1)
       rspec-expectations (>= 3)
       rspec-protobuf (>= 0.3)
       twirp (>= 1)
@@ -24,7 +24,7 @@ GEM
       rspec-mocks (~> 3.13.0)
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
-    rspec-expectations (3.13.0)
+    rspec-expectations (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-mocks (3.13.0)
@@ -33,7 +33,7 @@ GEM
     rspec-protobuf (0.3.1)
       google-protobuf (>= 3)
       rspec-expectations (>= 3)
-    rspec-support (3.13.0)
+    rspec-support (3.13.1)
     ruby2_keywords (0.0.5)
     simplecov (0.22.0)
       docile (~> 1.1)
