@@ -1,34 +1,4 @@
-pool = Google::Protobuf::DescriptorPool.new
-
-pool.build do
-  add_message "HelloRequest" do
-    optional :name, :string, 1
-    optional :count, :int32, 2
-  end
-
-  add_message "HelloResponse" do
-    repeated :message, :string, 1
-  end
-
-  add_message "GoodbyeRequest" do
-    optional :name, :string, 1
-  end
-
-  add_message "GoodbyeResponse" do
-    optional :message, :string, 1
-    optional :name, :string, 2
-  end
-end
-
-HelloRequest = pool.lookup("HelloRequest").msgclass
-HelloResponse = pool.lookup("HelloResponse").msgclass
-GoodbyeRequest = pool.lookup("GoodbyeRequest").msgclass
-GoodbyeResponse = pool.lookup("GoodbyeResponse").msgclass
-
-# Google::Protobuf::DescriptorPool.generated_pool.build do
-# HelloRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("HelloRequest").msgclass
-# HelloResponse = Google::Protobuf::DescriptorPool.generated_pool.lookup("HelloResponse").msgclass
-# GoodbyeRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("GoodbyeRequest").msgclass
+require_relative 'hello_world/service_pb'
 
 class HelloWorldService < Twirp::Service
   service "HelloWorld"
