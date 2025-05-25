@@ -1,4 +1,6 @@
-require_relative "lib/rspec/twirp/version"
+# Dir["lib/**/version.rb"].each(&Kernel.method(:load))
+Kernel.load("#{__dir__}/lib/rspec/twirp/version.rb")
+
 package = RSpec::Twirp
 
 Gem::Specification.new do |s|
