@@ -1,5 +1,4 @@
-# Dir["lib/**/version.rb"].each(&Kernel.method(:load))
-Kernel.load("lib/rspec/twirp/version.rb")
+Kernel.load("./lib/rspec/twirp/version.rb")
 
 package = RSpec::Twirp
 
