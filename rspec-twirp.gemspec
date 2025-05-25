@@ -1,4 +1,4 @@
-Kernel.load("./lib/rspec/twirp/version.rb")
+require_relative "lib/rspec/twirp/version"
 
 package = RSpec::Twirp
 
