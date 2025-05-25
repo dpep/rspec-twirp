@@ -1,5 +1,4 @@
 require_relative "lib/rspec/twirp/version"
-
 package = RSpec::Twirp
 
 Gem::Specification.new do |s|
