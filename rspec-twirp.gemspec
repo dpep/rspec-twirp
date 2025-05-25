@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = package.to_s
   s.version     = package.const_get "VERSION"
 
-  s.required_ruby_version = ">= 3"
+  s.required_ruby_version = ">= 3.2"
 
   s.add_dependency "rspec-expectations", ">= 3"
   s.add_dependency "rspec-protobuf", ">= 0.3"
