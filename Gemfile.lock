@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rspec-twirp (0.4.1)
+    rspec-twirp (0.0.1)
       rspec-expectations (>= 3)
       rspec-protobuf (>= 0.3)
       twirp (>= 1.11)
@@ -9,35 +9,35 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    bigdecimal (3.1.9)
+    bigdecimal (3.2.1)
     date (3.4.1)
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
     docile (1.4.1)
-    faraday (2.12.1)
+    faraday (2.13.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
-    google-protobuf (4.31.0)
+    google-protobuf (4.31.1)
       bigdecimal
       rake (>= 13)
     io-console (0.8.0)
     irb (1.14.1)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.9.0)
-    logger (1.6.2)
+    json (2.12.2)
+    logger (1.7.0)
     net-http (0.6.0)
       uri
     psych (5.2.1)
       date
       stringio
-    rack (3.1.8)
-    rake (13.2.1)
+    rack (3.1.15)
+    rake (13.3.0)
     rdoc (6.8.1)
       psych (>= 4.0.0)
     reline (0.5.12)
@@ -65,11 +65,11 @@ GEM
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
     stringio (3.1.2)
-    twirp (1.13.0)
+    twirp (1.13.1)
       faraday (< 3)
       google-protobuf (>= 3.25, < 5.a)
       rack (>= 2.2.3)
-    uri (1.0.2)
+    uri (1.0.3)
 
 PLATFORMS
   ruby
