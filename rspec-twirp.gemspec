@@ -1,5 +1,4 @@
 require_relative "lib/rspec/twirp/version"
-package = RSpec::Twirp
 
 Gem::Specification.new do |s|
   s.authors     = ["Daniel Pepper"]
@@ -7,9 +6,9 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files * ':!:spec'`.split("\n")
   s.homepage    = "https://github.com/dpep/rspec-twirp"
   s.license     = "MIT"
-  s.name        = File.basename(__FILE__).split(".")[0]
-  s.summary     = package.to_s
-  s.version     = package.const_get "VERSION"
+  s.name        = "rspec-twirp"
+  s.summary     = "RSpec::Twirp"
+  s.version     = RSpec::Twirp::VERSION
 
   s.required_ruby_version = ">= 3.2"
 
