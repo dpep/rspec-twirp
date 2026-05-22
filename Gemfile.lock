@@ -16,12 +16,12 @@ GEM
       reline (>= 0.3.8)
     diff-lcs (1.6.2)
     docile (1.4.1)
-    faraday (2.12.1)
+    faraday (2.14.2)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-net_http (3.4.0)
-      net-http (>= 0.5.0)
+    faraday-net_http (3.4.3)
+      net-http (~> 0.5)
     google-protobuf (4.31.0)
       bigdecimal
       rake (>= 13)
@@ -29,10 +29,10 @@ GEM
     irb (1.14.1)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.9.0)
-    logger (1.6.2)
-    net-http (0.6.0)
-      uri
+    json (2.19.5)
+    logger (1.7.0)
+    net-http (0.9.1)
+      uri (>= 0.11.1)
     psych (5.2.1)
       date
       stringio
@@ -69,7 +69,7 @@ GEM
       faraday (< 3)
       google-protobuf (>= 3.25, < 5.a)
       rack (>= 2.2.3)
-    uri (1.0.2)
+    uri (1.1.1)
 
 PLATFORMS
   ruby
