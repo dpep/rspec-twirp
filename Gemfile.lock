@@ -80,6 +80,7 @@ PLATFORMS
 
 DEPENDENCIES
   debug
+  rake
   rspec (>= 3)
   rspec-twirp!
   simplecov
