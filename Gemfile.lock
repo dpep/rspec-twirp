@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rspec-twirp (0.4.1)
+    rspec-twirp (0.4.2)
       rspec-expectations (>= 3)
       rspec-protobuf (>= 0.4.1)
       twirp (>= 1.11)
