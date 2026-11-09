@@ -1,4 +1,4 @@
-## Unreleased
+###  0.4.2  (2026-11-08)
 - Fix nested matchers on google-protobuf 4, e.g. `be_a_twirp_message(request: include(count: 0))`: protobuf 4's `to_h` drops default-valued fields, so these silently failed. Requires rspec-protobuf >= 0.4.1.
 - Requires Ruby >= 3.3 (rspec-protobuf 0.4 does). Ruby 3.2 users stay on rspec-twirp 0.4.1.
 
