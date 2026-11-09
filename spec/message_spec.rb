@@ -66,4 +66,12 @@ describe "be_a_twirp_message" do
       is_expected.not_to be_a_twirp_message(name: 123)
     end
   end
+
+  context "with a nested message" do
+    subject { HelloResponse.new(request: HelloRequest.new(name: "Bob")) }
+
+    it "matches default values via nested matchers" do
+      is_expected.to be_a_twirp_message(request: include(name: "Bob", count: 0))
+    end
+  end
 end
