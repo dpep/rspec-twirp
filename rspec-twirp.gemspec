@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 3.3"
 
   s.add_dependency "rspec-expectations", ">= 3"
-  s.add_dependency "rspec-protobuf", ">= 0.4"
+  s.add_dependency "rspec-protobuf", ">= 0.4.1"
   s.add_dependency "twirp", ">= 1.11"
 
   s.add_development_dependency "debug"

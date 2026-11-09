@@ -3,7 +3,7 @@ PATH
   specs:
     rspec-twirp (0.4.1)
       rspec-expectations (>= 3)
-      rspec-protobuf (>= 0.4)
+      rspec-protobuf (>= 0.4.1)
       twirp (>= 1.11)
 
 GEM
@@ -62,7 +62,7 @@ GEM
     rspec-mocks (3.13.6)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-protobuf (0.4.0)
+    rspec-protobuf (0.4.1)
       google-protobuf (>= 3)
       rspec-expectations (>= 3)
     rspec-support (3.13.6)
