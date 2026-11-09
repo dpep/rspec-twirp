@@ -63,7 +63,7 @@ GEM
       google-protobuf (>= 3)
       rspec-expectations (>= 3)
     rspec-support (3.13.6)
-    simplecov (1.2.0)
+    simplecov (1.3.2)
     stringio (3.2.0)
     tsort (0.2.0)
     twirp (1.13.1)
@@ -81,7 +81,7 @@ DEPENDENCIES
   rake
   rspec (>= 3)
   rspec-twirp!
-  simplecov
+  simplecov (>= 1)
 
 BUNDLED WITH
    2.3.9
