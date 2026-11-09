@@ -11,6 +11,7 @@ message HelloRequest {
 
 message HelloResponse {
   repeated string message = 1;
+  HelloRequest request = 2;
 }
 
 message GoodbyeRequest {
