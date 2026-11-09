@@ -1,4 +1,5 @@
-// protoc --ruby_out=. spec/support/hello_world/service.proto
+// Regenerate service_pb.rb (protoc 36.2) from the repo root:
+//   protoc --ruby_out=. spec/support/hello_world/service.proto
 
 syntax = "proto3";
 
