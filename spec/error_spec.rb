@@ -103,8 +103,9 @@ describe "be_a_twirp_error" do
         "to have meta",
 
         # diff
-        '-:meta => {:is_meta=>"false"},',
-        '+:meta => {:is_meta=>"true"},',
+        # Hash#inspect format changed in Ruby 3.4
+        "-:meta => #{{ is_meta: "false" }.inspect},",
+        "+:meta => #{{ is_meta: "true" }.inspect},",
       )
 
       expect {
