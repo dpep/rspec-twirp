@@ -40,6 +40,7 @@ GEM
       date
       stringio
     rack (3.2.6)
+    rake (13.4.2)
     rdoc (7.2.0)
       erb
       psych (>= 4.0.0)
@@ -77,6 +78,7 @@ PLATFORMS
 DEPENDENCIES
   debug
   google-protobuf (~> 3.25)
+  rake
   rspec (>= 3)
   rspec-twirp!
   simplecov
